@@ -54,7 +54,7 @@ const CREATETODOITEM = (name) =>
 
   const RANDOMID = Math.random() * 15.75;
   TODOITEM.id = RANDOMID.toFixed(2);
-  
+
   TODOITEM.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
   TODOITEM.textContent = name;
 
@@ -74,11 +74,30 @@ const CREATETODOITEM = (name) =>
   }
 }
 
+const CHANGETOITEMDONE = (arr, item) =>
+{
+  arr.map(obj => 
+    {
+      if(obj.id === item.id && obj.done === false)
+      {
+        obj.done = true;
+      }
+      else
+      {
+        obj.done = false;
+      }
+    });
+}
+
 const COMPLETEITEM = (item, btn) =>
 {
   btn.addEventListener('click', () => 
   {
+    todoArray = JSON.parse(localStorage.getItem(key));
     item.classList.toggle('list-group-item-success');
+    CHANGETOITEMDONE(todoArray, item);
+
+    localStorage.setItem(key, JSON.stringify(todoArray));
   });
 }
 
@@ -88,6 +107,11 @@ const DELETEITEM = (item, btn) =>
   {
     if(confirm('Are You shure?'))
     {
+      todoArray = JSON.parse(localStorage.getItem(key));
+
+      const NEWLIST = todoArray.filter(obj => obj.id !== item.id);
+
+      localStorage.setItem(key, JSON.stringify(NEWLIST));
       item.remove();
     }
   });
