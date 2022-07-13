@@ -1,3 +1,5 @@
+let todoArray = [];
+
 const CREATEAPPTITLE = (title) =>
 {
   const APPTITLE = document.createElement('h1');
@@ -50,6 +52,9 @@ const CREATETODOITEM = (name) =>
   const DONEBTN = document.createElement('button');
   const DELETEBTN = document.createElement('button');
 
+  const RANDOMID = Math.random() * 15.75;
+  TODOITEM.id = RANDOMID.toFixed(2);
+  
   TODOITEM.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
   TODOITEM.textContent = name;
 
@@ -110,6 +115,22 @@ function createTodoApp(container, title, key)
     COMPLETEITEM(TODOITEM.TODOITEM, TODOITEM.DONEBTN);
     DELETEITEM(TODOITEM.TODOITEM, TODOITEM.DELETEBTN);
 
+    const CREATEITEMOBJ = (arr) =>
+    {
+      const ITEMOBJ = 
+      {
+        name: APPFORM.INPUT.value,
+        id: TODOITEM.TODOITEM.id,
+        done: false
+      }
+
+      arr.push(ITEMOBJ);
+    }
+
+    CREATEITEMOBJ(todoArray);
+
+    localStorage.setItem(key, JSON.stringify(todoArray));
+    
     APPLIST.append(TODOITEM.TODOITEM);
     APPFORM.INPUT.value = '';
   });
