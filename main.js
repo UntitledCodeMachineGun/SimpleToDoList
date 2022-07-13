@@ -70,7 +70,8 @@ const CREATETODOITEM = (name) =>
   return{
     TODOITEM,
     DONEBTN,
-    DELETEBTN
+    DELETEBTN,
+    BTNWRAPPER
   }
 }
 
@@ -82,7 +83,7 @@ const CHANGETOITEMDONE = (arr, item) =>
       {
         obj.done = true;
       }
-      else
+      else if(obj.id === item.id && obj.done === true)
       {
         obj.done = false;
       }
@@ -125,6 +126,34 @@ function createTodoApp(container, title, key)
 
   container.append(APPTITLE, APPFORM.FORM, APPLIST);
 
+  if(localStorage.getItem(key))
+  {
+    todoArray = JSON.parse(localStorage.getItem(key))
+
+    for(const OBJ of todoArray)
+    {
+      const TODOITEM = CREATETODOITEM(APPFORM.INPUT.value);
+
+      TODOITEM.TODOITEM.textContent = OBJ.name;
+      TODOITEM.TODOITEM.id = OBJ.id;
+
+      if(OBJ.done == true)
+      {
+        TODOITEM.TODOITEM.classList.add('list-group-item-success');
+      }
+      else
+      {
+        TODOITEM.TODOITEM.classList.remove('list-group-item-success');
+      }
+
+      COMPLETEITEM(TODOITEM.TODOITEM, TODOITEM.DONEBTN);
+      DELETEITEM(TODOITEM.TODOITEM, TODOITEM.DELETEBTN);
+
+      APPLIST.append(TODOITEM.TODOITEM);
+      TODOITEM.TODOITEM.append(TODOITEM.BTNWRAPPER);
+    }
+  }
+
   APPFORM.FORM.addEventListener('submit', e => 
   {
     e.preventDefault();
@@ -138,6 +167,17 @@ function createTodoApp(container, title, key)
 
     COMPLETEITEM(TODOITEM.TODOITEM, TODOITEM.DONEBTN);
     DELETEITEM(TODOITEM.TODOITEM, TODOITEM.DELETEBTN);
+
+    let localStorageData = localStorage.getItem(key);
+    
+    if(localStorageData == null)
+    {
+      todoArray = [];
+    }
+    else
+    {
+      todoArray = JSON.parse(localStorageData);
+    }
 
     const CREATEITEMOBJ = (arr) =>
     {
