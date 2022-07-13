@@ -14,9 +14,13 @@ const CREATETODOFORM = () =>
   const WRAPPER = document.createElement('div');
 
   FORM.classList.add('input-group', 'mb-3');
+
   INPUT.classList.add('form-control');
   INPUT.placeholder = 'Input task name';
+
   ADDBUTTON.classList.add('btn', 'btn-primary');
+  ADDBUTTON.textContent = 'Add a task';
+
   WRAPPER.classList.add('input-group-append');
 
   WRAPPER.append(ADDBUTTON);
@@ -59,10 +63,29 @@ const CREATETODOITEM = (name) =>
   TODOITEM.append(BTNWRAPPER);
 
   return{
-    ITEM,
+    TODOITEM,
     DONEBTN,
     DELETEBTN
   }
+}
+
+const COMPLETEITEM = (item, btn) =>
+{
+  btn.addEventListener('click', () => 
+  {
+    item.classList.toggle('list-group-item-success');
+  });
+}
+
+const DELETEITEM = (item, btn) =>
+{
+  btn.addEventListener('click', () =>
+  {
+    if(confirm('Are You shure?'))
+    {
+      item.remove();
+    }
+  });
 }
 
 function createTodoApp(container, title, key)
@@ -77,14 +100,17 @@ function createTodoApp(container, title, key)
   {
     e.preventDefault();
 
-    const TODOITEM = createTodoApp(APPFORM.INPUT.value);
+    const TODOITEM = CREATETODOITEM(APPFORM.INPUT.value);
 
     if(!APPFORM.INPUT.value)
     {
       return;
     }
 
-    APPLIST.append(TODOITEM);
+    COMPLETEITEM(TODOITEM.TODOITEM, TODOITEM.DONEBTN);
+    DELETEITEM(TODOITEM.TODOITEM, TODOITEM.DELETEBTN);
+
+    APPLIST.append(TODOITEM.TODOITEM);
     APPFORM.INPUT.value = '';
-  })
+  });
 }
